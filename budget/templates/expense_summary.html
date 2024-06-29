@@ -1,0 +1,119 @@
+{%extends 'base.html'%}
+
+{%block main_block%}
+
+{%load custom_filter%}
+
+    {%csrf_token%}
+
+    <div class="container ">
+
+        <div class="card">
+            <div class="card-header">
+
+                <h3 class=" fw-bold text-center">TotalExpense: {{expense_total.total}}</h3>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">category chart
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <div class="col-4"><p>category progress bar</p>
+                        {% for cs in category_summary%}
+                        {{cs.category}}{{cs.total}}
+                        <div class="progress mb-4" role="progressbar" aria-label="Info example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                         
+                            <div class="progress-bar bg-info text-dark" style="width: {{cs.total|percentage:expense_total.total}}%">{{cs.total|percentage:expense_total.total}}%</div>
+                          </div>
+                        {%endfor%}
+                    </div>
+                    <div class="col-4">priority summary chart
+                        <canvas id="priorityChart"></canvas>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+{%endblock%}
+
+{%block script_block%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: [{% for cs in category_summary%} "{{cs.category}}", {%endfor%}],
+      datasets: [{
+        label: '# of Votes',
+        data: [{%for cs in category_summary %} "{{cs.total}}", {%endfor%}],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+
+<!-- category chart -->
+
+<script>
+    const ctx1 = document.getElementById('priorityChart');
+  
+    new Chart(ctx1, {
+      type: 'doughnut',
+      data: {
+        labels: [{% for cs in priority_summary%} "{{cs.priority}}", {%endfor%}],
+        datasets: [{
+          label: '# of Votes',
+          data: [{%for cs in priority_summary %} "{{cs.total}}", {%endfor%}],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+{%endblock%}
+
+<!-- <h2 class="text-center">Expense Summary</h2>
+
+        <h3>Total Expense : {{expense_total.total}}</h3>
+
+        <div>
+            
+        <h3>Summary</h3>
+
+        {%for cs in category_summary%}
+
+            <p>{{cs.category}} :  {{cs.total}}</p>
+            
+        {%endfor%}
+        </div>
+
+        <h3>Priority Summary</h3>
+
+        {%for pr in priority_summary%}
+
+            <p>{{pr.priority}} :: {{pr.total}}</p>
+
+        {%endfor%} -->
+

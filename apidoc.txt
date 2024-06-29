@@ -1,0 +1,64 @@
+Authentication:
+
+schema: user
+
+attributes: [username, email, password]
+
+1> Api for creating user 
+
+    url : http://127.0.0.1:8000/
+    method: post
+    body: {username,email.password}
+    
+====================================================================
+
+
+2) incomee
+
+    schema: incomee
+
+    attributes: ["title","amount","category","created_date"]
+
+    1)api for listing incomee
+
+        url: http://127.0.0.1:8000/api/income/
+
+        method: get
+
+        body: null
+
+        authorization: [usrname,password]
+
+    2) api for adding income
+    url: http://127.0.0.1:8000/api/income/
+
+    metod: post
+
+    body:{
+        title , amount, category
+    }
+
+    authorization: [usernaem, password]
+
+    3) aoi for updating income
+
+    url: http://127.0.0.1:8000/api/<int:pk>/income/
+
+    method:post
+
+    body:{
+        title,amount,category
+    }
+
+    authorization: [username, password]
+    4) api for delete
+
+    url:http://127.0.0.1:8000/api/<int:pk>/income/
+
+    method:delete
+
+    body: null
+
+    authorization:[username,password]
+
+    
